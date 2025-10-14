@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>space_rover</name>
+  <version>0.1.0</version>
+  <description>Rover-in-a-Box meta package</description>
+  <maintainer email="you@example.com">Your Name</maintainer>
+  <license>Apache-2.0</license>
+</package>

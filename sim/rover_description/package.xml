@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>rover_description</name>
+  <version>0.1.0</version>
+  <description>Rover URDF and meshes</description>
+  <maintainer email="you@example.com">Your Name</maintainer>
+  <license>Apache-2.0</license>
+</package>

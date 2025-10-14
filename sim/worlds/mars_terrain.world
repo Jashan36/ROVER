@@ -1,0 +1,5 @@
+<!-- Stub Gazebo world that will later reference a heightmap PNG -->
+<world name="mars_terrain">
+  <!-- Add ground plane, sun, and heightmap-based terrain here -->
+  <!-- Replace with exported DEM heightmap and scale settings -->
+</world>

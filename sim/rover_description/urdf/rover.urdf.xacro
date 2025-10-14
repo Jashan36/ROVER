@@ -1,0 +1,7 @@
+<!-- Minimal rover URDF xacro stub -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mars_rover">
+  <xacro:property name="wheel_radius" value="0.15"/>
+  <link name="base_link" />
+  <!-- Add chassis, wheels, sensors here -->
+  <include filename="sensors.xacro" />
+</robot>

@@ -1,0 +1,7 @@
+<!-- Sensors xacro stub: camera, lidar, imu -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rover_sensors">
+  <!-- Camera mount -->
+  <link name="camera_link" />
+  <!-- Lidar mount -->
+  <link name="lidar_link" />
+</robot>

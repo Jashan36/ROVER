@@ -1,0 +1,16 @@
+# Core Python deps
+numpy
+scipy
+pillow
+matplotlib
+opencv-python
+pyyaml
+requests
+streamlit
+torch
+torchvision
+tqdm
+# Optional: add jax if planning to use it
+# jax[cpu]
+
+# ROS2 Python client (rclpy) is installed with ROS2, not via pip

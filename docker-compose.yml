@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  dashboard:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: bash -lc "pip install -r requirements.txt && streamlit run dashboard/app.py --server.port=8501 --server.address=0.0.0.0"
+    ports:
+      - "8501:8501"
+    environment:
+      - PYTHONUNBUFFERED=1
+
+# Note: Full ROS2 + Gazebo in Docker requires privileged containers and GPU passthrough; left as an advanced exercise.
