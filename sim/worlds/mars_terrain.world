@@ -1,5 +1,70 @@
-<!-- Stub Gazebo world that will later reference a heightmap PNG -->
-<world name="mars_terrain">
-  <!-- Add ground plane, sun, and heightmap-based terrain here -->
-  <!-- Replace with exported DEM heightmap and scale settings -->
-</world>
+<!-- sim/worlds/mars_terrain.world -->
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <world name="mars">
+    
+    <!-- Physics (Mars gravity) -->
+    <physics name="default_physics" type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+      <real_time_update_rate>1000.0</real_time_update_rate>
+      <gravity>0 0 -3.71</gravity>  <!-- Mars gravity: 3.71 m/s² -->
+    </physics>
+    
+    <!-- Mars-like lighting -->
+    <light name="sun" type="directional">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 100 0 0 0</pose>
+      <diffuse>0.8 0.7 0.6 1</diffuse>  <!-- Reddish sunlight -->
+      <specular>0.5 0.4 0.3 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+    
+    <!-- Ambient light (Mars atmosphere) -->
+    <ambient>0.4 0.35 0.3 1</ambient>
+    
+    <!-- Terrain from heightmap -->
+    <model name="mars_terrain">
+      <static>true</static>
+      <link name="terrain_link">
+        <collision name="collision">
+          <geometry>
+            <heightmap>
+              <uri>file://$(find rover_description)/worlds/mars_heightmap.png</uri>
+              <size>200 200 10</size>  <!-- 200m x 200m area, 10m max height -->
+              <pos>0 0 0</pos>
+            </heightmap>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>0.8</mu>
+                <mu2>0.8</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <heightmap>
+              <uri>file://$(find rover_description)/worlds/mars_heightmap.png</uri>
+              <size>200 200 10</size>
+              <texture>
+                <diffuse>file://media/materials/textures/mars_regolith.jpg</diffuse>
+                <normal>file://media/materials/textures/mars_normal.jpg</normal>
+                <size>10</size>
+              </texture>
+            </heightmap>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    
+  </world>
+</sdf>

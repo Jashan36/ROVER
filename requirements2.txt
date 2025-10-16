@@ -1,0 +1,86 @@
+## 2. `requirements.txt`
+
+```txt
+# ============================================
+# Mars Rover AI - Python Dependencies
+# ============================================
+
+# Core Deep Learning
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+
+# Computer Vision
+opencv-python>=4.7.0
+opencv-contrib-python>=4.7.0
+Pillow>=9.5.0
+scikit-image>=0.20.0
+
+# ROS2 Integration
+rclpy>=3.0.0
+sensor-msgs>=4.2.0
+geometry-msgs>=4.2.0
+nav-msgs>=4.2.0
+visualization-msgs>=4.2.0
+cv-bridge>=3.0.0
+tf2-ros>=0.25.0
+
+# Numerical Computing
+numpy>=1.24.0
+scipy>=1.10.0
+pandas>=2.0.0
+
+# Geospatial Data
+rasterio>=1.3.0
+gdal>=3.6.0
+geopandas>=0.13.0
+
+# Data Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.14.0
+bokeh>=3.1.0
+
+# Web Dashboard
+streamlit>=1.22.0
+streamlit-webrtc>=0.44.0
+websockets>=11.0.0
+
+# Data Fetching & APIs
+requests>=2.28.0
+beautifulsoup4>=4.12.0
+aiohttp>=3.8.0
+python-dotenv>=1.0.0
+
+# Configuration & Serialization
+PyYAML>=6.0
+toml>=0.10.0
+python-json-logger>=2.0.0
+
+# Utilities & Progress Tracking
+tqdm>=4.65.0
+python-dateutil>=2.8.0
+colorama>=0.4.0
+rich>=13.0.0
+
+# Testing & Development
+pytest>=7.3.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.0.0
+
+# Performance Optimization
+numba>=0.57.0
+psutil>=5.9.0
+pynvml>=11.5.0
+
+# Optional: GPU Acceleration (uncomment if needed)
+# torch>=2.0.0+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
+# torchvision>=0.15.0+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
+
+# Optional: Advanced ML (uncomment if needed)
+# scikit-learn>=1.2.0
+# transformers>=4.25.0
+# datasets>=2.10.0

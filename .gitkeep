@@ -1,0 +1,13 @@
+# Create .gitkeep in empty directories
+touch data/.gitkeep
+touch data/raw/.gitkeep
+touch data/raw/perseverance/.gitkeep
+touch data/raw/ai4mars/.gitkeep
+touch data/raw/dem/.gitkeep
+touch data/processed/.gitkeep
+touch data/cache/.gitkeep
+touch logs/.gitkeep
+touch ai/models/weights/.gitkeep
+touch demos/videos/.gitkeep
+touch demos/screenshots/.gitkeep
+touch demos/rosbags/.gitkeep

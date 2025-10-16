@@ -1,8 +1,77 @@
 <?xml version="1.0"?>
-<package format="2">
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypelocation="http://download.ros.org/schema/package_format3.xsd"?>
+<package format="3">
   <name>space_rover</name>
-  <version>0.1.0</version>
-  <description>Rover-in-a-Box meta package</description>
-  <maintainer email="you@example.com">Your Name</maintainer>
-  <license>Apache-2.0</license>
+  <version>1.0.0</version>
+  <description>Autonomous Mars Rover with Real-time AI Perception and Navigation</description>
+  <maintainer email="dev@marsrover.ai">Mars Rover AI Team</maintainer>
+  <license>MIT</license>
+
+  <!-- Build and dependency tools -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+
+  <!-- Core ROS2 dependencies -->
+  <depend>rclpy</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>visualization_msgs</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2</depend>
+
+  <!-- Simulation dependencies -->
+  <depend>gazebo_ros_pkgs</depend>
+  <depend>gazebo_dev</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>joint_state_publisher</depend>
+  <depend>xacro</depend>
+
+  <!-- Navigation dependencies -->
+  <depend>nav2_bringup</depend>
+  <depend>navigation2</depend>
+  <depend>slam_toolbox</depend>
+  <depend>cartographer_ros</depend>
+  <depend>robot_localization</depend>
+
+  <!-- Image processing -->
+  <depend>cv_bridge</depend>
+  <depend>image_transport</depend>
+  <depend>image_common</depend>
+
+  <!-- Python dependencies -->
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-opencv</exec_depend>
+  <exec_depend>python3-pillow</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
+  <exec_depend>python3-scipy</exec_depend>
+  <exec_depend>python3-matplotlib</exec_depend>
+
+  <!-- Launch system -->
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>launch_xml</exec_depend>
+  <exec_depend>launch_yaml</exec_depend>
+
+  <!-- Testing -->
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+  <test_depend>ament_cmake_pytest</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
+  <!-- Export for ROS2 build system -->
+  <export>
+    <build_type>ament_cmake</build_type>
+    
+    <!-- Gazebo model path -->
+    <gazebo_ros gazebo_model_path="${prefix}/sim/rover_description"/>
+    
+    <!-- Python module exports -->
+    <python_modules>
+      ai
+      integration  
+      dashboard
+    </python_modules>
+  </export>
 </package>

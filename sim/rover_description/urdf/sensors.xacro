@@ -1,7 +1,207 @@
-<!-- Sensors xacro stub: camera, lidar, imu -->
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rover_sensors">
-  <!-- Camera mount -->
-  <link name="camera_link" />
-  <!-- Lidar mount -->
-  <link name="lidar_link" />
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Include main rover file -->
+  <xacro:include filename="$(find rover_description)/urdf/rover.urdf.xacro"/>
+
+  <!-- ==================== CAMERA SENSOR ==================== -->
+  <link name="camera_link">
+    <visual>
+      <geometry>
+        <box size="0.05 0.15 0.05"/> <!-- Camera housing -->
+      </geometry>
+      <material name="black"/>
+    </visual>
+    
+    <inertial>
+      <mass value="0.1"/>
+      <inertia
+        ixx="0.0001" ixy="0.0" ixz="0.0"
+        iyy="0.0001" iyz="0.0"
+        izz="0.0001"/>
+    </inertial>
+  </link>
+
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+    <origin xyz="0.35 0 0.4" rpy="0 0.1 0"/> <!-- Forward, elevated, 0.1 rad tilt down -->
+  </joint>
+
+  <gazebo reference="camera_link">
+    <sensor name="camera" type="camera">
+      <update_rate>10.0</update_rate> <!-- 10 Hz -->
+      <camera name="front_camera">
+        <horizontal_fov>1.3962634</horizontal_fov> <!-- 80° -->
+        <image>
+          <width>1280</width>
+          <height>960</height>
+          <format>R8G8B8</format> <!-- RGB -->
+        </image>
+        <clip>
+          <near>0.1</near> <!-- Min distance -->
+          <far>100</far> <!-- Max distance -->
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev> <!-- Realistic sensor noise -->
+        </noise>
+      </camera>
+
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <always_on>true</always_on>
+        <update_rate>10.0</update_rate>
+        <camera_name>front_camera</camera_name>
+        <image_topic_name>camera/image_raw</image_topic_name>
+        <camera_info_topic_name>camera/camera_info</camera_info_topic_name>
+        <frame_name>camera_link</frame_name>
+        <hack_baseline>0.07</hack_baseline>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <!-- ==================== LIDAR SENSOR ==================== -->
+  <link name="lidar_link">
+    <visual>
+      <geometry>
+        <cylinder radius="0.05" length="0.07"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    
+    <inertial>
+      <mass value="0.2"/>
+      <inertia
+        ixx="0.0001" ixy="0.0" ixz="0.0"
+        iyy="0.0001" iyz="0.0"
+        izz="0.0001"/>
+    </inertial>
+  </link>
+
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+    <origin xyz="0 0 0.35" rpy="0 0 0"/>
+  </joint>
+
+  <gazebo reference="lidar_link">
+    <sensor name="lidar" type="ray">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>true</visualize>
+      <update_rate>10</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>360</samples>    <!-- 360° coverage -->
+            <resolution>1</resolution>    <!-- 1° steps -->
+            <min_angle>-3.14159</min_angle>  <!-- -180° -->
+            <max_angle>3.14159</max_angle>  <!-- +180° -->
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.3</min>   <!-- 30 cm minimum -->
+          <max>30.0</max>   <!-- 30 m maximum -->
+          <resolution>0.01</resolution>  <!-- 1 cm accuracy -->
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>  <!-- 1 cm noise -->
+        </noise>
+      </ray>
+
+      <plugin name="lidar_controller" filename="libgazebo_ros_ray_sensor.so">
+        <topic_name>scan</topic_name>
+        <frame_name>lidar_link</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <!-- ==================== IMU SENSOR ==================== -->
+  <link name="imu_link">
+    <inertial>
+      <mass value="0.01"/>
+      <inertia
+        ixx="0.000001" ixy="0.0" ixz="0.0"
+        iyy="0.000001" iyz="0.0"
+        izz="0.000001"/>
+    </inertial>
+  </link>
+
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/> <!-- Center of mass -->
+  </joint>
+
+  <gazebo reference="imu_link">
+    <sensor name="imu" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate> <!-- 100 Hz -->
+      <imu>
+        <angular_velocity>
+          <x>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>0.0002</stddev>
+              <bias_mean>0.0000075</bias_mean>
+              <bias_stddev>0.0000008</bias_stddev>
+            </noise>
+          </x>
+          <y>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>0.0002</stddev>
+              <bias_mean>0.0000075</bias_mean>
+              <bias_stddev>0.0000008</bias_stddev>
+            </noise>
+          </y>
+          <z>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>0.0002</stddev>
+              <bias_mean>0.0000075</bias_mean>
+              <bias_stddev>0.0000008</bias_stddev>
+            </noise>
+          </z>
+        </angular_velocity>
+        <linear_acceleration>
+          <x>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>0.017</stddev>
+              <bias_mean>0.1</bias_mean>
+              <bias_stddev>0.001</bias_stddev>
+            </noise>
+          </x>
+          <y>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>0.017</stddev>
+              <bias_mean>0.1</bias_mean>
+              <bias_stddev>0.001</bias_stddev>
+            </noise>
+          </y>
+          <z>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>0.017</stddev>
+              <bias_mean>0.1</bias_mean>
+              <bias_stddev>0.001</bias_stddev>
+            </noise>
+          </z>
+        </linear_acceleration>
+      </imu>
+      
+      <plugin name="imu_controller" filename="libgazebo_ros_imu_sensor.so">
+        <topic_name>imu</topic_name>
+        <body_name>imu_link</body_name>
+        <update_rate>100.0</update_rate>
+        <gravity>true</gravity>
+        <frame_name>imu_link</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
 </robot>

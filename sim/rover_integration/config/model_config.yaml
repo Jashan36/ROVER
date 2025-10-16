@@ -1,0 +1,18 @@
+# AI Model Configuration
+model_path: "ai/models/weights/terrain_unet_best.pth"
+input_size: [512, 512]
+num_classes: 4
+class_names: ["soil", "bedrock", "sand", "big_rock"]
+
+# Training parameters
+learning_rate: 0.001
+batch_size: 4
+num_epochs: 100
+
+# Inference settings
+use_gpu: true
+half_precision: false
+
+# Post-processing
+min_confidence: 0.5
+morphology_kernel: 3

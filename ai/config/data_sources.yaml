@@ -1,0 +1,30 @@
+sources:
+  kaggle:
+    api_module: kagglehub
+    datasets:
+      - id: "gauravkumar2525/mars-rover-dataset"
+        name: "mars-rover"
+      - id: "yash92328/ai4mars-terrainaware-autonomous-driving-on-mars"
+        name: "ai4mars"
+
+  huggingface:
+    api_module: datasets
+    datasets:
+      - id: "hassanjbara/AI4MARS"
+        name: "ai4mars-hf"
+
+  nasa:
+    api_endpoint: "https://api.nasa.gov/mars-photos/api/v1/"
+    datasets:
+      - id: "curiosity/photos"
+        name: "curiosity-raw"
+
+  google_drive:
+    datasets:
+      - id: "1aBcDeFgHiJkLmNoPqRsTuVwXyZ"
+        name: "custom-mars"
+
+  direct_url:
+    datasets:
+      - url: "https://example.com/mars_data.zip"
+        name: "external-mars"

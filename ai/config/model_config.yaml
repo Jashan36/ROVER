@@ -1,6 +1,220 @@
-# Model configuration example
+# ============================================
+# MODEL CONFIGURATION
+# Configuration for terrain segmentation models
+# ============================================
+
 model:
-  name: simple_unet
-  in_channels: 3
-  out_channels: 1
-  weights: ai/models/weights/latest.pth
+  name: "terrain_unet"
+  architecture: "unet"
+  version: "1.0.0"
+  
+  # Model parameters
+  n_channels: 3
+  n_classes: 5
+  bilinear: true  # Use bilinear upsampling instead of transposed convolution
+  
+  # Input specifications
+  input_size: [512, 512]  # [height, width]
+  input_format: "RGB"
+  input_range: [0, 255]  # Input image value range
+  
+  # Class definitions
+  classes:
+    0:
+      name: "soil"
+      description: "Travers able soil/regolith"
+      color: [139, 69, 19]  # Brown
+      traversability: 0.9
+    1:
+      name: "bedrock"
+      description: "Exposed bedrock surface"
+      color: [128, 128, 128]  # Gray
+      traversability: 0.6
+    2:
+      name: "sand"
+      description: "Sandy terrain with slip risk"
+      color: [255, 228, 181]  # Tan
+      traversability: 0.4
+    3:
+      name: "big_rock"
+      description: "Large rock obstacle"
+      color: [105, 105, 105]  # Dark gray
+      traversability: 0.1
+    4:
+      name: "background"
+      description: "Unknown/unsafe terrain"
+      color: [0, 0, 0]  # Black
+      traversability: 0.0
+
+# ============================================
+# TRAINING CONFIGURATION
+# ============================================
+
+training:
+  # Dataset
+  dataset: "ai4mars"
+  data_root: "data/raw/ai4mars"
+  
+  # Training parameters
+  num_epochs: 100
+  batch_size: 16
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  
+  # Optimizer
+  optimizer:
+    type: "adam"
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+  
+  # Learning rate schedule
+  scheduler:
+    enabled: true
+    type: "reduce_on_plateau"
+    mode: "min"
+    patience: 5
+    factor: 0.5
+    min_lr: 1.0e-6
+    verbose: true
+  
+  # Loss function
+  loss:
+    type: "cross_entropy"
+    use_class_weights: true
+    label_smoothing: 0.1
+  
+  # Data augmentation
+  augmentation:
+    intensity: "medium"  # light, medium, heavy
+    horizontal_flip: 0.5
+    vertical_flip: 0.2
+    rotation_limit: 45
+    shift_limit: 0.1
+    scale_limit: 0.2
+    brightness_contrast: 0.2
+    noise_probability: 0.3
+  
+  # Validation
+  validation:
+    split_ratio: 0.2
+    frequency: 1  # Validate every N epochs
+    metric: "miou"  # Primary metric for model selection
+  
+  # Checkpointing
+  checkpoint:
+    save_frequency: 10  # Save every N epochs
+    save_best_only: false
+    keep_last_n: 3  # Keep last N checkpoints
+  
+  # Early stopping
+  early_stopping:
+    enabled: true
+    patience: 15
+    min_delta: 0.001
+  
+  # Mixed precision training
+  mixed_precision:
+    enabled: false  # Enable for faster training on modern GPUs
+    
+  # Multi-GPU
+  distributed:
+    enabled: false
+    backend: "nccl"
+
+# ============================================
+# EVALUATION CONFIGURATION
+# ============================================
+
+evaluation:
+  metrics:
+    - "miou"  # Mean Intersection over Union
+    - "pixel_accuracy"
+    - "class_accuracy"
+    - "dice_score"
+  
+  # Test-time augmentation
+  tta:
+    enabled: false
+    augmentations:
+      - "horizontal_flip"
+      - "vertical_flip"
+
+# ============================================
+# MODEL OPTIMIZATION
+# ============================================
+
+optimization:
+  # Quantization
+  quantization:
+    enabled: false
+    dtype: "int8"  # int8, int16
+    
+  # Pruning
+  pruning:
+    enabled: false
+    amount: 0.3  # Prune 30% of weights
+    
+  # Knowledge distillation
+  distillation:
+    enabled: false
+    teacher_model: null
+    temperature: 3.0
+    alpha: 0.5
+
+# ============================================
+# DEPLOYMENT CONFIGURATION
+# ============================================
+
+deployment:
+  export_formats:
+    - "pytorch"  # .pth
+    - "onnx"     # .onnx
+    # - "tensorrt"  # .trt
+    # - "tflite"    # .tflite
+  
+  # ONNX export settings
+  onnx:
+    opset_version: 11
+    dynamic_axes:
+      input: [0, 2, 3]  # Batch, height, width
+      output: [0, 2, 3]
+  
+  # Runtime optimization
+  runtime:
+    use_half_precision: false
+    batch_size: 1
+    num_threads: 4
+
+# ============================================
+# LOGGING AND MONITORING
+# ============================================
+
+logging:
+  tensorboard: true
+  log_dir: "logs/training"
+  log_frequency: 10  # Log every N batches
+  
+  # Weights & Biases integration
+  wandb:
+    enabled: false
+    project: "mars-rover-ai"
+    entity: null
+  
+  # MLflow integration
+  mlflow:
+    enabled: false
+    tracking_uri: null
+    experiment_name: "terrain_segmentation"
+
+# ============================================
+# PATHS
+# ============================================
+
+paths:
+  weights_dir: "ai/models/weights"
+  cache_dir: "data/cache"
+  output_dir: "data/processed"
+  
+  # Pretrained models
+  pretrained:
+    terrain_unet: "ai/models/weights/terrain_unet_best.pth"

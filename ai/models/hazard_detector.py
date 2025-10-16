@@ -541,8 +541,8 @@ class HazardDetector:
         hazards: List[DetectedHazard]
     ) -> DetectedHazard:
         """Merge multiple overlapping hazards into one"""
-        # Take highest severity
-        max_severity = max(h.severity for h in hazards)
+        # Take highest severity (compare by enum value for Python 3.13 compatibility)
+        max_severity = max((h.severity for h in hazards), key=lambda s: s.value)
         
         # Average position
         avg_y = int(np.mean([h.position[0] for h in hazards]))

@@ -1,1 +1,247 @@
-port: 8501
+---
+# ============================================
+# DASHBOARD CONFIGURATION
+# Mars Rover AI Dashboard Settings
+# ============================================
+
+dashboard:
+  title: "Mars Rover AI Dashboard"
+  page_icon: ":rocket:"
+  layout: "wide"  # wide or centered
+  initial_sidebar_state: "expanded"  # expanded or collapsed
+  
+  # Theme
+  theme:
+    primary_color: "#FF4B4B"
+    background_color: "#0E1117"
+    secondary_background_color: "#262730"
+    text_color: "#FAFAFA"
+    font: "sans serif"
+
+# ============================================
+# CONNECTION SETTINGS
+# ============================================
+
+connection:
+  # WebSocket
+  websocket_uri: "ws://localhost:8765"
+  reconnect_interval: 5.0  # seconds
+  max_reconnect_attempts: 10
+  
+  # Data queue
+  max_queue_size: 5
+  
+  # Timeouts
+  connection_timeout: 10.0  # seconds
+  message_timeout: 5.0  # seconds
+
+# ============================================
+# DATA PROCESSING
+# ============================================
+
+processing:
+  # History
+  history_size: 100  # Number of data points to keep
+  
+  # Filtering
+  enable_smoothing: true
+  smoothing_window: 5
+  
+  # Thresholds
+  stale_data_threshold: 5.0  # seconds
+  warning_threshold: 2.0  # seconds
+
+# ============================================
+# DISPLAY SETTINGS
+# ============================================
+
+display:
+  # Refresh
+  default_refresh_rate: 5  # Hz
+  min_refresh_rate: 1
+  max_refresh_rate: 10
+  
+  # Image display
+  image:
+    quality: 85  # JPEG quality
+    max_width: 1280
+    max_height: 960
+  
+  # Charts
+  charts:
+    theme: "plotly_dark"
+    default_height: 300
+    show_legend: true
+    show_grid: true
+  
+  # Metrics
+  metrics:
+    precision: 2  # Decimal places
+    show_delta: true
+    delta_color: "normal"  # normal or inverse
+
+# ============================================
+# CAMERA VIEW SETTINGS
+# ============================================
+
+camera:
+  # Default view
+  default_view: "overlay"  # overlay, traversability, hazards
+  
+  # Overlay
+  overlay_alpha: 0.5
+  show_confidence: false
+  show_grid: false
+  
+  # Controls
+  enable_controls: true
+  allow_snapshot: true
+  snapshot_dir: "data/snapshots"
+
+# ============================================
+# MAP VIEWER SETTINGS
+# ============================================
+
+map:
+  # Display
+  default_center: "rover"  # rover, target, hazards
+  default_zoom: 5
+  
+  # Elements
+  show_trajectory: true
+  show_hazards: true
+  show_waypoints: true
+  show_grid: false
+  
+  # Colors
+  colors:
+    rover: "green"
+    waypoint: "yellow"
+    hazard: "red"
+    trajectory: "cyan"
+
+# ============================================
+# HAZARD PANEL SETTINGS
+# ============================================
+
+hazards:
+  # Alert thresholds
+  low_hazard_count: 0
+  medium_hazard_count: 2
+  high_hazard_count: 5
+  
+  # Display
+  show_breakdown: true
+  show_alert_log: true
+  max_alerts: 20
+  
+  # Icons
+  icons:
+    large_rock: "rock"
+    sand_trap: "sand"
+    steep_slope: "slope"
+    uncertain: "unknown"
+
+# ============================================
+# METRICS SETTINGS
+# ============================================
+
+metrics:
+  # Display
+  show_current: true
+  show_history: true
+  show_statistics: true
+  
+  # Thresholds
+  thresholds:
+    traversability:
+      safe: 0.7
+      caution: 0.4
+      danger: 0.0
+    
+    fps:
+      target: 5.0
+      warning: 3.0
+      critical: 1.0
+    
+    hazards:
+      safe: 0
+      caution: 2
+      danger: 5
+  
+  # Charts
+  time_window: 60  # seconds
+  update_interval: 1.0  # seconds
+
+# ============================================
+# SCIENCE NOTES SETTINGS
+# ============================================
+
+science:
+  # Auto-generation
+  auto_generate: true
+  generation_interval: 10.0  # seconds
+  
+  # Observations
+  max_observations: 50
+  priority_levels: ["low", "medium", "high"]
+  
+  # Export
+  export_format: "txt"  # txt, json, csv
+  export_dir: "data/science_notes"
+
+# ============================================
+# TRAJECTORY PLANNER SETTINGS
+# ============================================
+
+trajectory:
+  # Planning
+  planning_mode: "autonomous"  # autonomous, assisted, manual
+  max_waypoints: 10
+  
+  # Safety
+  default_safety_margin: 1.0  # meters
+  max_speed: 0.5  # m/s
+  
+  # Display
+  show_current_path: true
+  show_waypoints: true
+  show_hazards: true
+  path_length: 10  # meters
+
+# ============================================
+# LOGGING
+# ============================================
+
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  
+  # Log file
+  enable_file_logging: true
+  log_file: "logs/dashboard.log"
+  max_file_size: 10485760  # 10 MB
+  backup_count: 5
+  
+  # Console
+  enable_console_logging: true
+  
+  # What to log
+  log_connections: true
+  log_data_updates: false  # Set to true for debugging
+  log_errors: true
+
+# ============================================
+# ADVANCED SETTINGS
+# ============================================
+
+advanced:
+  # Performance
+  enable_caching: true
+  cache_size: 100
+  
+  # Debug
+  debug_mode: false
+  show_debug_info: false
+  
+  # Experimental
+  enable_experimental_features: false

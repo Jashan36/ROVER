@@ -1,1 +1,282 @@
-use_sim_time: true
+# ROS-AI Bridge Configuration
+inference_rate: 5.0              # Hz
+input_size: [512, 512]           # Model input dimensions
+confidence_threshold: 0.7        # Minimum confidence for hazards
+max_hazards: 10                  # Maximum hazards to track
+costmap_resolution: 0.1          # meters per cell
+publish_overlay: true            # Publish overlay images
+use_gpu: false                   # Use GPU for inference
+
+# Performance settings
+max_buffer_size: 5               # Image buffer size
+inference_timeout: 2.0           # seconds
+status_publish_rate: 1.0         # Hz
+
+# Hazard detection parameters
+hazard_confidence_threshold: 0.8
+min_hazard_size: 0.5             # meters
+max_hazard_size: 3.0             # meters
+
+# Traversability analysis
+class_weights:
+  0: 0.9    # soil
+  1: 0.7    # bedrock  
+  2: 0.3    # sand
+  3: 0.1    # big_rock
+# ============================================
+# ROS2-AI BRIDGE CONFIGURATION
+# ============================================
+
+# ROS2 Node Configuration
+ros2:
+  node_name: "terrain_analyzer"
+  namespace: ""
+  
+  # QoS Settings
+  qos:
+    depth: 10
+    reliability: "reliable"  # reliable or best_effort
+    durability: "volatile"   # volatile or transient_local
+    history: "keep_last"     # keep_last or keep_all
+  
+  # Subscribers
+  subscribers:
+    camera:
+      topic: "/camera/image_raw"
+      qos_depth: 5
+      buffer_size: 5
+      message_type: "sensor_msgs/Image"
+  
+  # Publishers
+  publishers:
+    segmentation:
+      topic: "/terrain/segmentation"
+      qos_depth: 2
+      enabled: true
+    
+    overlay:
+      topic: "/terrain/overlay"
+      qos_depth: 2
+      enabled: true
+    
+    traversability:
+      topic: "/terrain/traversability_map"
+      qos_depth: 2
+      enabled: true
+    
+    hazards:
+      topic: "/terrain/hazards"
+      qos_depth: 10
+      enabled: true
+    
+    costmap:
+      topic: "/terrain/costmap"
+      qos_depth: 2
+      enabled: true
+    
+    markers:
+      topic: "/terrain/hazard_markers"
+      qos_depth: 10
+      enabled: true
+  
+  # Frame IDs
+  frames:
+    camera_frame: "camera_link"
+    map_frame: "map"
+    base_frame: "base_link"
+    odom_frame: "odom"
+  
+  # Processing
+  processing:
+    inference_rate_hz: 5.0     # Maximum inference frequency
+    publish_rate_hz: 10.0      # Maximum publish frequency
+    enable_threading: true     # Use separate thread for inference
+    thread_priority: 50        # Thread priority (0-99)
+    
+    # Buffer management
+    image_buffer_size: 5
+    result_buffer_size: 10
+    
+    # Performance
+    enable_profiling: false
+    log_statistics_interval: 10.0  # seconds
+
+# ============================================
+# AI INFERENCE CONFIGURATION
+# ============================================
+
+inference:
+  # Model
+  model:
+    path: "ai/models/weights/terrain_unet_best.pth"
+    device: "auto"  # auto, cuda, cpu
+    use_cache: true
+  
+  # Input
+  input:
+    size: [512, 512]  # [height, width]
+    format: "RGB"
+    normalization:
+      enabled: true
+      mean: [0.485, 0.456, 0.406]
+      std: [0.229, 0.224, 0.225]
+  
+  # Performance
+  performance:
+    enable_half_precision: false
+    enable_model_caching: true
+    max_batch_size: 1
+    num_threads: 4
+  
+  # Output
+  output:
+    generate_overlays: true
+    overlay_alpha: 0.5
+    generate_costmap: true
+    generate_markers: true
+
+# ============================================
+# TRAVERSABILITY CONFIGURATION
+# ============================================
+
+traversability:
+  # Base scores per terrain class
+  base_scores:
+    soil: 0.9
+    bedrock: 0.6
+    sand: 0.4
+    big_rock: 0.1
+    background: 0.0
+  
+  # Analysis parameters
+  confidence_weight: 0.3
+  min_traversability: 0.3
+  safety_margin_pixels: 20
+  inflation_radius_pixels: 30
+  
+  # Direction analysis
+  num_directions: 8
+  look_ahead_distance: 2.0  # meters
+
+# ============================================
+# HAZARD DETECTION CONFIGURATION
+# ============================================
+
+hazard_detection:
+  enabled: true
+  
+  # Detection strategies
+  strategies:
+    semantic_segmentation: true
+    edge_detection: true
+    texture_analysis: true
+    shadow_detection: true
+  
+  # Thresholds
+  thresholds:
+    large_rock_min_area: 50
+    sand_trap_min_area: 200
+    uncertain_min_area: 100
+    low_confidence: 0.6
+  
+  # Temporal filtering
+  temporal:
+    enabled: true
+    history_size: 30
+    min_persistence: 2
+
+# ============================================
+# COSTMAP CONFIGURATION
+# ============================================
+
+costmap:
+  enabled: true
+  
+  # Grid parameters
+  resolution: 0.05  # meters per cell
+  width: 200        # cells
+  height: 200       # cells
+  origin_x: -5.0    # meters
+  origin_y: -5.0    # meters
+  
+  # Cost parameters
+  free_threshold: 0.7
+  occupied_threshold: 0.3
+  
+  # Inflation
+  inflation_radius: 0.5  # meters
+  cost_scaling_factor: 3.0
+  
+  # Update rates
+  update_frequency: 5.0  # Hz
+  publish_frequency: 2.0  # Hz
+  
+  # Integration
+  combine_with_slam: true
+  slam_costmap_topic: "/map"
+
+# ============================================
+# DASHBOARD CONFIGURATION
+# ============================================
+
+dashboard:
+  enabled: true
+  
+  # WebSocket server
+  websocket:
+    host: "localhost"
+    port: 8765
+    max_queue_size: 10
+  
+  # Data streaming
+  streaming:
+    fps: 5.0
+    image_quality: 85  # JPEG quality (0-100)
+    image_format: "JPEG"  # JPEG or PNG
+    
+    # What to send
+    send_overlay: true
+    send_traversability: true
+    send_hazards: true
+    send_metrics: true
+    send_performance: true
+
+# ============================================
+# LOGGING CONFIGURATION
+# ============================================
+
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  
+  # Log destinations
+  console: true
+  file: true
+  file_path: "logs/bridge.log"
+  
+  # What to log
+  log_inference_time: true
+  log_hazards: true
+  log_performance: true
+  log_errors: true
+  
+  # Statistics
+  statistics_interval: 10.0  # seconds
+
+# ============================================
+# DEBUGGING CONFIGURATION
+# ============================================
+
+debug:
+  enabled: false
+  
+  # Save intermediate outputs
+  save_outputs: false
+  output_dir: "debug/bridge"
+  
+  # Profiling
+  profile_inference: false
+  profile_publishing: false
+  
+  # Visualization
+  visualize_costmap: false
+  visualize_hazards: true

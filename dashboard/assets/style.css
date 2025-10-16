@@ -1,0 +1,305 @@
+/* ============================================
+   MARS ROVER AI DASHBOARD - CUSTOM STYLES
+   ============================================ */
+
+/* Main container */
+.main {
+    background-color: #0E1117;
+    color: #FAFAFA;
+}
+
+/* Header styling */
+h1, h2, h3, h4, h5, h6 {
+    color: #FAFAFA !important;
+    font-family: 'Inter', sans-serif;
+}
+
+h1 {
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 1rem !important;
+}
+
+h2 {
+    font-size: 2rem !important;
+    font-weight: 600 !important;
+}
+
+h3 {
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    border-bottom: 2px solid #FF4B4B;
+    padding-bottom: 0.5rem;
+    margin-top: 1.5rem !important;
+}
+
+/* Metric cards */
+[data-testid="stMetricValue"] {
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    color: #00CC96 !important;
+}
+
+[data-testid="stMetricDelta"] {
+    font-size: 1rem !important;
+}
+
+/* Status indicators */
+.status-live {
+    background-color: #00CC96;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.status-delayed {
+    background-color: #FFA500;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.status-stale {
+    background-color: #EF553B;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Buttons */
+.stButton > button {
+    background-color: #FF4B4B;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.stButton > button:hover {
+    background-color: #FF6B6B;
+    box-shadow: 0 4px 8px rgba(255, 75, 75, 0.3);
+}
+
+.stButton > button:active {
+    background-color: #DD3B3B;
+}
+
+/* Tabs */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 1rem;
+    background-color: #262730;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+}
+
+.stTabs [data-baseweb="tab"] {
+    background-color: transparent;
+    border-radius: 0.5rem;
+    color: #FAFAFA;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.stTabs [data-baseweb="tab"]:hover {
+    background-color: #3A3B45;
+}
+
+.stTabs [aria-selected="true"] {
+    background-color: #FF4B4B !important;
+    color: white !important;
+}
+
+/* Expander */
+.streamlit-expanderHeader {
+    background-color: #262730;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    font-weight: 600;
+    color: #FAFAFA;
+}
+
+.streamlit-expanderHeader:hover {
+    background-color: #3A3B45;
+}
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background-color: #1A1B24;
+    padding: 2rem 1rem;
+}
+
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3 {
+    color: #FAFAFA !important;
+}
+
+/* Cards/Containers */
+.element-container {
+    margin-bottom: 1rem;
+}
+
+/* Image containers */
+[data-testid="stImage"] {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Info/Warning/Error boxes */
+.stAlert {
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+[data-testid="stAlert"][kind="info"] {
+    background-color: rgba(0, 204, 150, 0.1);
+    border-left: 4px solid #00CC96;
+}
+
+[data-testid="stAlert"][kind="warning"] {
+    background-color: rgba(255, 165, 0, 0.1);
+    border-left: 4px solid #FFA500;
+}
+
+[data-testid="stAlert"][kind="error"] {
+    background-color: rgba(239, 85, 59, 0.1);
+    border-left: 4px solid #EF553B;
+}
+
+[data-testid="stAlert"][kind="success"] {
+    background-color: rgba(0, 204, 150, 0.1);
+    border-left: 4px solid #00CC96;
+}
+
+/* Progress bars */
+.stProgress > div > div {
+    background-color: #00CC96;
+    border-radius: 0.5rem;
+}
+
+/* Sliders */
+.stSlider [data-baseweb="slider"] {
+    margin-top: 1rem;
+}
+
+.stSlider [role="slider"] {
+    background-color: #FF4B4B;
+}
+
+/* Text inputs */
+.stTextInput > div > div {
+    background-color: #262730;
+    border-radius: 0.5rem;
+    border: 1px solid #3A3B45;
+}
+
+.stTextInput > div > div:focus-within {
+    border-color: #FF4B4B;
+    box-shadow: 0 0 0 2px rgba(255, 75, 75, 0.2);
+}
+
+/* Selectbox */
+.stSelectbox > div > div {
+    background-color: #262730;
+    border-radius: 0.5rem;
+}
+
+/* Divider */
+hr {
+    border-color: #3A3B45 !important;
+    margin: 2rem 0 !important;
+}
+
+/* Plotly charts */
+.js-plotly-plot {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+/* Custom classes */
+.metric-card {
+    background-color: #262730;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin: 0.5rem 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.hazard-high {
+    color: #EF553B !important;
+    font-weight: 700 !important;
+}
+
+.hazard-medium {
+    color: #FFA500 !important;
+    font-weight: 600 !important;
+}
+
+.hazard-low {
+    color: #00CC96 !important;
+    font-weight: 500 !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1A1B24;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3A3B45;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #4A4B55;
+}
+
+/* Animations */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Loading spinner */
+.stSpinner > div {
+    border-color: #FF4B4B !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem !important;
+    }
+    
+    h3 {
+        font-size: 1.2rem !important;
+    }
+    
+    [data-testid="stMetricValue"] {
+        font-size: 1.5rem !important;
+    }
+}

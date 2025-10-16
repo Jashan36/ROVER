@@ -65,6 +65,8 @@ data/cache/
 !data/.gitkeep
 !data/raw/.gitkeep
 !data/processed/.gitkeep
+!dashboard/assets/*.png
+!docs/images/*.png
 
 # ROS
 build/

@@ -1,0 +1,61 @@
+# Extended Kalman Filter for sensor fusion
+ekf_filter_node:
+  ros__parameters:
+    # Frequency
+    frequency: 50.0
+
+    # Sensor topics
+    imu0: /imu
+    odom0: /odom
+
+    # IMU configuration
+    imu0_config: [false, false, false,
+                  false, false, true,
+                  true,  true,  true,
+                  false, false, false,
+                  false, false, false]
+
+    # Odom configuration  
+    odom0_config: [true,  true,  false,
+                   false, false, true,
+                   false, false, false,
+                   false, false, false,
+                   false, false, false]
+
+    # Initial state
+    initial_state: [0.0, 0.0, 0.0,  # Position
+                    0.0, 0.0, 0.0,  # Orientation
+                    0.0, 0.0, 0.0,  # Velocity
+                    0.0, 0.0, 0.0,  # Gyro bias
+                    0.0, 0.0, 0.0]  # Accel bias
+
+    # Process noise
+    process_noise_covariance: [0.05, 0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                               0,    0.05, 0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                               0,    0,    0.06, 0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                               0,    0,    0,    0.03, 0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                               0,    0,    0,    0,    0.03, 0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                               0,    0,    0,    0,    0,    0.06, 0,     0,     0,    0,    0,    0,    0,    0,    0,
+                               0,    0,    0,    0,    0,    0,    0.025, 0,     0,    0,    0,    0,    0,    0,    0,
+                               0,    0,    0,    0,    0,    0,    0,     0.025, 0,    0,    0,    0,    0,    0,    0,
+                               0,    0,    0,    0,    0,    0,    0,     0,     0.04, 0,    0,    0,    0,    0,    0,
+                               0,    0,    0,    0,    0,    0,    0,     0,     0,    0.01, 0,    0,    0,    0,    0,
+                               0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0.01, 0,    0,    0,    0,
+                               0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0.01, 0,    0,    0,
+                               0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0.02, 0,    0,
+                               0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0.02, 0,
+                               0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0.02]
+
+    # Frame IDs
+    odom_frame: odom
+    base_link_frame: base_link
+    world_frame: odom
+
+    # Use sim time
+    use_sim_time: True
+
+    # Two wheel odom mode (for differential drive)
+    two_d_mode: true
+
+    # Print diagnostics
+    print_diagnostics: true

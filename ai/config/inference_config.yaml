@@ -1,2 +1,282 @@
-batch_size: 1
-device: cpu
+# ============================================
+# INFERENCE CONFIGURATION
+# Real-time inference pipeline settings
+# ============================================
+
+inference:
+  # Model loading
+  model:
+    path: "ai/models/weights/terrain_unet_best.pth"
+    device: "auto"  # auto, cuda, cpu
+    use_cache: true
+    
+  # Input processing
+  input:
+    size: [512, 512]  # [height, width]
+    format: "RGB"
+    normalization:
+      mean: [0.485, 0.456, 0.406]  # ImageNet stats
+      std: [0.229, 0.224, 0.225]
+  
+  # Performance optimization
+  performance:
+    enable_half_precision: false  # FP16 inference
+    enable_model_caching: true
+    max_batch_size: 1
+    num_threads: 4
+    
+    # TensorRT optimization (NVIDIA only)
+    tensorrt:
+      enabled: false
+      precision: "fp32"  # fp32, fp16, int8
+      workspace_size_mb: 1024
+  
+  # Output generation
+  output:
+    generate_overlays: true
+    overlay_alpha: 0.5
+    generate_costmap: true
+    save_results: false
+    output_dir: "data/processed/inference"
+
+# ============================================
+# TRAVERSABILITY ANALYSIS
+# ============================================
+
+traversability:
+  # Scoring parameters
+  base_scores:
+    soil: 0.9
+    bedrock: 0.6
+    sand: 0.4
+    big_rock: 0.1
+    background: 0.0
+  
+  # Confidence weighting
+  confidence_weight: 0.3  # How much confidence affects score
+  min_traversability: 0.3  # Minimum acceptable score
+  
+  # Safety margins
+  safety_margin_pixels: 20
+  inflation_radius_pixels: 30
+  
+  # Direction analysis
+  num_directions: 8  # Number of direction sectors
+  look_ahead_pixels: 100  # How far to look ahead
+  
+  # Costmap generation
+  costmap:
+    resolution: 0.05  # meters per pixel
+    max_cost: 100
+    lethal_cost: 100
+    unknown_cost: 255
+
+# ============================================
+# HAZARD DETECTION
+# ============================================
+
+hazard_detection:
+  enabled: true
+  
+  # Detection strategies
+  strategies:
+    semantic_segmentation: true
+    edge_detection: true
+    texture_analysis: true
+    shadow_detection: true
+  
+  # Hazard types and thresholds
+  hazards:
+    large_rock:
+      enabled: true
+      min_area_pixels: 50
+      severity_threshold: 0.7
+    
+    rock_cluster:
+      enabled: true
+      min_rocks: 3
+      max_distance: 50
+    
+    sand_trap:
+      enabled: true
+      min_area_pixels: 200
+      low_texture_threshold: 20
+    
+    steep_slope:
+      enabled: true
+      max_safe_slope_deg: 25
+      critical_slope_deg: 35
+    
+    uncertain_terrain:
+      enabled: true
+      min_area_pixels: 100
+      low_confidence_threshold: 0.6
+    
+    shadow_region:
+      enabled: true
+      min_area_pixels: 150
+      brightness_threshold: 60
+  
+  # Temporal filtering
+  temporal:
+    enabled: true
+    history_size: 30  # Number of frames
+    min_persistence: 2  # Appear in N frames
+  
+  # Distance estimation
+  distance_estimation:
+    camera_height_m: 0.4
+    camera_tilt_rad: 0.1
+    camera_fov_rad: 1.396  # 80 degrees
+    focal_length_pixels: 920
+
+# ============================================
+# VISUALIZATION
+# ============================================
+
+visualization:
+  # Segmentation overlay
+  segmentation:
+    show_classes: true
+    show_confidence: false
+    alpha: 0.5
+  
+  # Traversability map
+  traversability:
+    colormap: "RdYlGn"  # Red-Yellow-Green
+    show_direction: true
+    show_scores: false
+  
+  # Hazard markers
+  hazards:
+    show_bounding_boxes: true
+    show_labels: true
+    show_severity: true
+    
+    # Severity colors
+    colors:
+      low: [255, 255, 0]      # Yellow
+      medium: [255, 165, 0]   # Orange
+      high: [255, 69, 0]      # Red-orange
+      critical: [255, 0, 0]   # Red
+
+# ============================================
+# ROS2 INTEGRATION
+# ============================================
+
+ros2:
+  # Node configuration
+  node_name: "terrain_analyzer"
+  namespace: ""
+  
+  # Subscribers
+  subscribers:
+    camera:
+      topic: "/camera/image_raw"
+      qos_depth: 5
+      queue_size: 5
+  
+  # Publishers
+  publishers:
+    segmentation:
+      topic: "/terrain/segmentation"
+      qos_depth: 2
+    
+    overlay:
+      topic: "/terrain/overlay"
+      qos_depth: 2
+    
+    traversability:
+      topic: "/terrain/traversability_map"
+      qos_depth: 2
+    
+    hazards:
+      topic: "/terrain/hazards"
+      qos_depth: 10
+    
+    costmap:
+      topic: "/terrain/costmap"
+      qos_depth: 2
+    
+    markers:
+      topic: "/terrain/hazard_markers"
+      qos_depth: 10
+  
+  # Processing
+  processing:
+    inference_rate_hz: 5.0  # Max inference frequency
+    publish_rate_hz: 10.0   # Max publish frequency
+    thread_safety: true
+    
+  # Frame IDs
+  frames:
+    camera_frame: "camera_link"
+    map_frame: "map"
+    base_frame: "base_link"
+
+# ============================================
+# BATCH PROCESSING
+# ============================================
+
+batch_processing:
+  # Input
+  input_dir: "data/raw/perseverance"
+  file_patterns:
+    - "*.jpg"
+    - "*.png"
+  recursive: false
+  max_files: null  # Process all files
+  
+  # Processing
+  num_workers: 4  # Parallel workers
+  batch_size: 8
+  
+  # Output
+  output_dir: "data/processed"
+  save_visualizations: true
+  save_raw_outputs: true
+  save_metadata: true
+  
+  # Output structure
+  output_structure:
+    overlays: "overlays"
+    traversability: "traversability"
+    hazards: "hazards"
+    segmentations: "segmentations"
+    costmaps: "costmaps"
+    metadata: "metadata"
+
+# ============================================
+# PERFORMANCE MONITORING
+# ============================================
+
+monitoring:
+  # Latency tracking
+  track_latency: true
+  latency_percentiles: [50, 90, 95, 99]
+  
+  # Statistics
+  log_statistics: true
+  statistics_frequency: 100  # Every N frames
+  
+  # Performance alerts
+  alerts:
+    max_inference_time_ms: 500
+    min_fps: 2.0
+    max_memory_mb: 2000
+
+# ============================================
+# DEBUG AND DEVELOPMENT
+# ============================================
+
+debug:
+  verbose: false
+  save_intermediate_outputs: false
+  profile_inference: false
+  
+  # Development mode
+  dev_mode:
+    enabled: false
+    use_dummy_data: false
+    force_cpu: false
+    disable_caching: false
